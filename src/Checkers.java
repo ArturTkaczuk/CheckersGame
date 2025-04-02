@@ -1,33 +1,110 @@
 import javax.swing.*;
 import java.awt.*;
+import java.awt.event.MouseAdapter;
+import java.awt.event.MouseEvent;
 
 public class Checkers {
-    // Constants
-    public static final int BOARD_SIZE = 8;
+    private static final int BOARD_SIZE = 8; // Chessboard size
+    private final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
+    private final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
+    private JButton selectedPiece = null; // Currently selected piece
 
-    // Global Variables
-    public static JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE];
-
-    public static void main(String[] args) {
-        JFrame frame = new JFrame("Checkers Game");
+    public Checkers() {
+        JFrame frame = new JFrame("Checkers");
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.setSize(600, 600);
-        frame.setLayout(new GridLayout(BOARD_SIZE, BOARD_SIZE));
         frame.setResizable(false);
 
+        JPanel board = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
+        frame.add(board);
+
+        // Create chessboard
         for (int row = 0; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 JPanel tile = new JPanel();
-                if ((row + col) % 2 == 0) {
-                    tile.setBackground(Color.WHITE);
-                } else {
-                    tile.setBackground(Color.BLACK);
-                }
+                tile.setBackground((row + col) % 2 == 0 ? Color.BLACK : Color.WHITE);
                 tiles[row][col] = tile;
+                board.add(tile);
 
-                frame.add(tile);
+
+                if(tile.getBackground().equals(Color.BLACK)){
+                    // Add click listener (Black tiles only) - to move the selected piece
+                    int finalRow = row, finalCol = col;
+                    tile.addMouseListener(new MouseAdapter() {
+                        @Override
+                        public void mouseClicked(MouseEvent e) {
+                            if (selectedPiece != null) {
+                                movePiece(selectedPiece, finalRow, finalCol);
+                            }
+                        }
+                    });
+                }
             }
         }
+
+        // Create and place three pieces at different positions
+        pieces[0][0] = createRoundButton(Color.RED);
+        pieces[1][1] = createRoundButton(Color.BLUE);
+        pieces[2][2] = createRoundButton(Color.GREEN);
+
+        placePiece(pieces[0][0], 0, 0);
+        placePiece(pieces[1][1], 1, 1);
+        placePiece(pieces[2][2], 2, 2);
+
         frame.setVisible(true);
+    }
+
+    // Create a round button representing a piece
+    private JButton createRoundButton(Color color) {
+        JButton button = new JButton();
+        button.setPreferredSize(new Dimension(50, 50));
+        button.setContentAreaFilled(false);
+        button.setFocusPainted(false);
+        button.setBorderPainted(false);
+        button.setOpaque(false);
+        button.setBackground(color);
+
+        // Custom painting to make it round
+        button.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
+            @Override
+            public void paint(Graphics g, JComponent c) {
+                Graphics2D g2 = (Graphics2D) g;
+                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+                g2.setColor(button.getBackground());
+                g2.fillOval(0, 0, c.getWidth(), c.getHeight());
+            }
+        });
+
+        // Select the piece when clicked
+        button.addActionListener(e -> selectedPiece = button);
+
+        return button;
+    }
+
+    // Place a piece on the board
+    private void placePiece(JButton piece, int row, int col) {
+        tiles[row][col].add(piece);
+        tiles[row][col].revalidate();
+        tiles[row][col].repaint();
+    }
+
+    // Move the selected piece to a new tile
+    private void movePiece(JButton piece, int row, int col) {
+        // Remove the piece from the previous position
+        for (int r = 0; r < BOARD_SIZE; r++) {
+            for (int c = 0; c < BOARD_SIZE; c++) {
+                tiles[r][c].remove(piece);
+                tiles[r][c].revalidate();
+                tiles[r][c].repaint();
+            }
+        }
+        // Add the piece to the new position
+        tiles[row][col].add(piece);
+        tiles[row][col].revalidate();
+        tiles[row][col].repaint();
+    }
+
+    public static void main(String[] args) {
+        new Checkers();
     }
 }
