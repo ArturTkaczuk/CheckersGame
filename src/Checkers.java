@@ -5,10 +5,10 @@ import java.awt.event.MouseEvent;
 
 public class Checkers {
     private static final int BOARD_SIZE = 8; // Chessboard size
-    private final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
-    private final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
-    private JButton selectedPiece = null; // Currently selected piece
-    private int selectedRow = 0, selectedCol = 0;
+    private static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
+    private static final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
+    private static JButton selectedPiece = null; // Currently selected piece
+    private static int selectedRow = 0, selectedCol = 0;
 
     public Checkers() {
         JFrame frame = new JFrame("Checkers");
@@ -33,9 +33,7 @@ public class Checkers {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            boolean pieceToMoveIsSelected = selectedPiece != null;
-                            boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
-                            if (pieceToMoveIsSelected && targetTileIsNotOccupied) {
+                            if (isMoveLegal(finalRow, finalCol)) {
                                 movePiece(selectedPiece, finalRow, finalCol);
                             }
                         }
@@ -59,7 +57,18 @@ public class Checkers {
     }
 
     public static boolean isMoveLegal(int finalRow, int finalCol){
-        return false;
+        boolean pieceToMoveIsSelected = selectedPiece != null;
+        boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
+        boolean targetTileIsNextToSelectedPiece = (Math.abs(finalRow - selectedRow) == 1 && Math.abs(finalCol - selectedCol) == 1);
+
+        if(pieceToMoveIsSelected && targetTileIsNotOccupied && targetTileIsNextToSelectedPiece){
+            return true;
+        } else {
+            selectedPiece = null;
+            selectedRow = 0;
+            selectedCol = 0;
+            return false;
+        }
     }
 
     // Create a round button representing a piece
