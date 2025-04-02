@@ -26,14 +26,13 @@ public class Checkers {
                 tiles[row][col] = tile;
                 board.add(tile);
 
-
+                // If tile is Black - add mouseListener to move the selected piece
                 if(tile.getBackground().equals(Color.BLACK)){
-                    // Add click listener (Black tiles only) - to move the selected piece
                     int finalRow = row, finalCol = col;
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            if (selectedPiece != null) {
+                            if (selectedPiece != null && tiles[finalRow][finalCol].getComponentCount() == 0) {
                                 movePiece(selectedPiece, finalRow, finalCol);
                             }
                         }
@@ -44,12 +43,14 @@ public class Checkers {
 
         // Create and place three pieces at different positions
         pieces[0][0] = createRoundButton(Color.RED);
-        pieces[1][1] = createRoundButton(Color.BLUE);
-        pieces[2][2] = createRoundButton(Color.GREEN);
+        pieces[1][1] = createRoundButton(Color.RED);
+        pieces[2][2] = createRoundButton(Color.BLUE);
+        pieces[3][3] = createRoundButton(Color.BLUE);
 
         placePiece(pieces[0][0], 0, 0);
         placePiece(pieces[1][1], 1, 1);
         placePiece(pieces[2][2], 2, 2);
+        placePiece(pieces[3][3], 3, 3);
 
         frame.setVisible(true);
     }
