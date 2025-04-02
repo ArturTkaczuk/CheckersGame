@@ -65,7 +65,17 @@ public class Checkers {
         boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
         boolean targetTileIsNextToSelectedPiece = (Math.abs(finalRow - selectedRow) == 1 && Math.abs(finalCol - selectedCol) == 1);
 
-        if(pieceToMoveIsSelected && targetTileIsNotOccupied && targetTileIsNextToSelectedPiece){
+        // Calculate middle tile coordinates
+        int middleRow = (selectedRow + finalRow) / 2;
+        int middleCol = (selectedCol + finalCol) / 2;
+
+        // Check if a jump move is valid
+        boolean isJumpValid = (Math.abs(finalRow - selectedRow) == 2 && Math.abs(finalCol - selectedCol) == 2);
+        boolean middleTileHasEnemyPiece = tiles[middleRow][middleCol].getComponentCount() == 1 && isEnemyPiece(middleRow, middleCol);
+
+        boolean canJumpOverEnemyPiece = isJumpValid && middleTileHasEnemyPiece;
+
+        if(pieceToMoveIsSelected && targetTileIsNotOccupied && (targetTileIsNextToSelectedPiece || canJumpOverEnemyPiece)){
             return true;
         } else {
             selectedPiece = null;
@@ -74,6 +84,19 @@ public class Checkers {
             return false;
         }
     }
+
+    public static boolean isEnemyPiece(int row, int col) {
+        if (tiles[row][col].getComponentCount() == 0) {
+            return false; // No piece in the middle tile
+        }
+
+        JButton piece = (JButton) tiles[row][col].getComponent(0);
+
+        // Assuming Red pieces play against Blue pieces
+        return (selectedPiece.getBackground() == Color.RED && piece.getBackground() == Color.BLUE) ||
+                (selectedPiece.getBackground() == Color.BLUE && piece.getBackground() == Color.RED);
+    }
+
 
     // Create a round button representing a piece
     private JButton createRoundPiece(Color color) {
