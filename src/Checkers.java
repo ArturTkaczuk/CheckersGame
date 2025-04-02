@@ -32,7 +32,9 @@ public class Checkers {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            if (selectedPiece != null && tiles[finalRow][finalCol].getComponentCount() == 0) {
+                            boolean pieceToMoveIsSelected = selectedPiece != null;
+                            boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
+                            if (pieceToMoveIsSelected && targetTileIsNotOccupied) {
                                 movePiece(selectedPiece, finalRow, finalCol);
                             }
                         }
