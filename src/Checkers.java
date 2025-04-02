@@ -35,6 +35,9 @@ public class Checkers {
                         public void mouseClicked(MouseEvent e) {
                             if (isMoveLegal(finalRow, finalCol)) {
                                 movePiece(selectedPiece, finalRow, finalCol);
+                                selectedPiece = null;
+                                selectedRow = 0;
+                                selectedCol = 0;
                             }
                         }
                     });
