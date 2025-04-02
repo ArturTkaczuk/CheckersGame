@@ -58,7 +58,7 @@ public class Checkers {
     // Create a round button representing a piece
     private JButton createRoundButton(Color color) {
         JButton button = new JButton();
-        button.setPreferredSize(new Dimension(50, 50));
+        button.setPreferredSize(new Dimension(55, 55));
         button.setContentAreaFilled(false);
         button.setFocusPainted(false);
         button.setBorderPainted(false);
