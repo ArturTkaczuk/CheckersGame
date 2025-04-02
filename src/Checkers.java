@@ -8,7 +8,7 @@ public class Checkers {
     private static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
     private static final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
     private static JButton selectedPiece = null; // Currently selected piece
-    private static int selectedRow = 0, selectedCol = 0;
+    private static int selectedRow = -1, selectedCol = -1;
 
     public Checkers() {
         JFrame frame = new JFrame("Checkers");
@@ -33,11 +33,12 @@ public class Checkers {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
+                            System.out.println("SelectedPiece:( " + selectedRow +","+ selectedCol +" )");
                             if (isMoveLegal(finalRow, finalCol)) {
                                 movePiece(selectedPiece, finalRow, finalCol);
                                 selectedPiece = null;
-                                selectedRow = 0;
-                                selectedCol = 0;
+                                selectedRow = -1;
+                                selectedCol = -1;
                             }
                         }
                     });
@@ -68,8 +69,8 @@ public class Checkers {
             return true;
         } else {
             selectedPiece = null;
-            selectedRow = 0;
-            selectedCol = 0;
+            selectedRow = -1;
+            selectedCol = -1;
             return false;
         }
     }
@@ -105,6 +106,7 @@ public class Checkers {
                     if (tiles[row][col].getComponentCount() > 0 && tiles[row][col].getComponent(0) == piece) {
                         selectedRow = row;
                         selectedCol = col;
+                        System.out.println("SelectedPiece:( " + selectedRow +","+ selectedCol +" )");
                         return;
                     }
                 }
