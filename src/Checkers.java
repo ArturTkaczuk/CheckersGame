@@ -86,6 +86,17 @@ public class Checkers {
         // Select the piece when clicked
         piece.addActionListener(e -> {
             selectedPiece = piece;
+
+            // Find the current row and column of the selected piece
+            for (int row = 0; row < BOARD_SIZE; row++) {
+                for (int col = 0; col < BOARD_SIZE; col++) {
+                    if (tiles[row][col].getComponentCount() > 0 && tiles[row][col].getComponent(0) == piece) {
+                        selectedRow = row;
+                        selectedCol = col;
+                        return;
+                    }
+                }
+            }
         });
 
         return piece;
