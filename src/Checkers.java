@@ -8,6 +8,7 @@ public class Checkers {
     private final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
     private final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
     private JButton selectedPiece = null; // Currently selected piece
+    private int selectedRow = 0, selectedCol = 0;
 
     public Checkers() {
         JFrame frame = new JFrame("Checkers");
@@ -44,10 +45,10 @@ public class Checkers {
         }
 
         // Create and place three pieces at different positions
-        pieces[0][0] = createRoundButton(Color.RED);
-        pieces[1][1] = createRoundButton(Color.RED);
-        pieces[2][2] = createRoundButton(Color.BLUE);
-        pieces[3][3] = createRoundButton(Color.BLUE);
+        pieces[0][0] = createRoundPiece(Color.RED);
+        pieces[1][1] = createRoundPiece(Color.RED);
+        pieces[2][2] = createRoundPiece(Color.BLUE);
+        pieces[3][3] = createRoundPiece(Color.BLUE);
 
         placePiece(pieces[0][0], 0, 0);
         placePiece(pieces[1][1], 1, 1);
@@ -57,31 +58,37 @@ public class Checkers {
         frame.setVisible(true);
     }
 
+    public static boolean isMoveLegal(int finalRow, int finalCol){
+        return false;
+    }
+
     // Create a round button representing a piece
-    private JButton createRoundButton(Color color) {
-        JButton button = new JButton();
-        button.setPreferredSize(new Dimension(55, 55));
-        button.setContentAreaFilled(false);
-        button.setFocusPainted(false);
-        button.setBorderPainted(false);
-        button.setOpaque(false);
-        button.setBackground(color);
+    private JButton createRoundPiece(Color color) {
+        JButton piece = new JButton();
+        piece.setPreferredSize(new Dimension(55, 55));
+        piece.setContentAreaFilled(false);
+        piece.setFocusPainted(false);
+        piece.setBorderPainted(false);
+        piece.setOpaque(false);
+        piece.setBackground(color);
 
         // Custom painting to make it round
-        button.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
+        piece.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
             @Override
             public void paint(Graphics g, JComponent c) {
                 Graphics2D g2 = (Graphics2D) g;
                 g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(button.getBackground());
+                g2.setColor(piece.getBackground());
                 g2.fillOval(0, 0, c.getWidth(), c.getHeight());
             }
         });
 
         // Select the piece when clicked
-        button.addActionListener(e -> selectedPiece = button);
+        piece.addActionListener(e -> {
+            selectedPiece = piece;
+        });
 
-        return button;
+        return piece;
     }
 
     // Place a piece on the board
