@@ -1,4 +1,4 @@
-# TODO: README
+# TEMPLATE README
 
 One of my first projects. Simple game made in JS, CSS & HTML to learn coding. Check it [Live here](https://smash-the-insect.netlify.app/)
 
