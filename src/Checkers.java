@@ -76,6 +76,12 @@ public class Checkers {
         boolean canJumpOverEnemyPiece = isJumpValid && middleTileHasEnemyPiece;
 
         if(pieceToMoveIsSelected && targetTileIsNotOccupied && (targetTileIsNextToSelectedPiece || canJumpOverEnemyPiece)){
+            // if canJumpOverEnemyPiece is true, remove enemy piece from the board
+            if(canJumpOverEnemyPiece){
+                tiles[middleRow][middleCol].removeAll();
+                tiles[middleRow][middleCol].revalidate();
+                tiles[middleRow][middleCol].repaint();
+            }
             return true;
         } else {
             selectedPiece = null;
