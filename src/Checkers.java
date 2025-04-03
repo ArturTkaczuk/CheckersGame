@@ -4,11 +4,11 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Checkers {
-    private static final int BOARD_SIZE = 8; // Chessboard size
-    private static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
-    private static final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
-    private static JButton selectedPiece = null; // Currently selected piece
-    private static int selectedRow = -1, selectedCol = -1;
+    public static final int BOARD_SIZE = 8; // Chessboard size
+    public static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
+    public static final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
+    public static JButton selectedPiece = null; // Currently selected piece
+    public static int selectedRow = -1, selectedCol = -1;
 
     public Checkers() {
         JFrame frame = new JFrame("Checkers");
@@ -105,7 +105,7 @@ public class Checkers {
 
 
     // Create a round button representing a piece
-    private JButton createRoundPiece(Color color) {
+    public JButton createRoundPiece(Color color) {
         JButton piece = new JButton();
         piece.setPreferredSize(new Dimension(55, 55));
         piece.setContentAreaFilled(false);
@@ -146,14 +146,14 @@ public class Checkers {
     }
 
     // Place a piece on the board
-    private void placePiece(JButton piece, int row, int col) {
+    public void placePiece(JButton piece, int row, int col) {
         tiles[row][col].add(piece);
         tiles[row][col].revalidate();
         tiles[row][col].repaint();
     }
 
     // Move the selected piece to a new tile
-    private void movePiece(JButton piece, int row, int col) {
+    public void movePiece(JButton piece, int row, int col) {
         // Remove the piece from the previous position
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
