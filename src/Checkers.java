@@ -53,18 +53,23 @@ public class Checkers {
 
         pieces[1][1] = new Piece(Color.RED);
         placePiece(pieces[1][1], 1, 1);
+        pieces[1][1].promoteToKing();
+
 
         pieces[2][2] = new Piece(Color.RED);
         placePiece(pieces[2][2], 2, 2);
 
         pieces[5][5] = new Piece(Color.BLUE);
         placePiece(pieces[5][5], 5, 5);
+        pieces[5][5].promoteToKing();
 
         pieces[6][6] = new Piece(Color.BLUE);
         placePiece(pieces[6][6], 6, 6);
 
+
         pieces[7][7] = new Piece(Color.BLUE);
         placePiece(pieces[7][7], 7, 7);
+
 
         frame.setVisible(true);
     }
