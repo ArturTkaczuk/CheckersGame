@@ -3,7 +3,7 @@ import java.awt.*;
 
 class Piece extends JButton {
     public final Color color;
-    private PieceType pieceType = PieceType.REGULAR; // Default to REGULAR
+    public PieceType pieceType = PieceType.REGULAR; // Default to REGULAR
 
     public Piece(Color color) {
         this.color = color;

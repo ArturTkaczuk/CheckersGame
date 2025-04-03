@@ -101,14 +101,20 @@ public class Checkers {
         boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
 
         // #################### MOVE LOGIC #################################################
-        boolean isRedPiece = selectedPiece.color.equals(Color.RED);
-        boolean isBluePiece = selectedPiece.color.equals(Color.BLUE);
-
         // Allow only legal one-step diagonal movement based on color
-        boolean targetTileIsNextToSelectedPiece =
+        boolean targetTileIsNextToSelectedPiece = false;
+
+        if(selectedPiece.pieceType.equals(PieceType.REGULAR)){
+            boolean isRedPiece = selectedPiece.color.equals(Color.RED);
+            boolean isBluePiece = selectedPiece.color.equals(Color.BLUE);
+            targetTileIsNextToSelectedPiece =
                 (Math.abs(finalCol - selectedPieceCol) == 1) &&
                 ((isRedPiece && finalRow == selectedPieceRow + 1) || (isBluePiece && finalRow == selectedPieceRow - 1));
-
+        }
+        else if (selectedPiece.pieceType.equals(PieceType.KING)){
+            targetTileIsNextToSelectedPiece =
+                (Math.abs(finalRow - selectedPieceRow) == 1 && Math.abs(finalCol - selectedPieceCol) == 1);
+        }
 
 
         // #################### JUMPING OVER PIECE LOGIC ###################################
