@@ -29,13 +29,14 @@ public class Checkers {
 
                 // If tile is Black - add mouseListener to move the selected tile
                 if(tile.getBackground().equals(Color.BLACK)){
-                    int finalRow = row, finalCol = col;
+                    int targetRow = row, targetCol = col;
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
                             System.out.println("SelectedPiece:( " + selectedPieceRow +","+ selectedPieceCol +" )");
-                            if (isMoveLegal(finalRow, finalCol)) {
-                                movePiece(selectedPiece, finalRow, finalCol);
+                            if (isMoveLegal(targetRow, targetCol)) {
+                                movePiece(selectedPiece, targetRow, targetCol);
+                                if(checkIfSelectedPieceIsToBePromoted(targetRow)) selectedPiece.promoteToKing();
                                 selectedPiece = null;
                                 selectedPieceRow = -1;
                                 selectedPieceCol = -1;
@@ -72,6 +73,18 @@ public class Checkers {
 
 
         frame.setVisible(true);
+    }
+
+    public boolean checkIfSelectedPieceIsToBePromoted(int targetRow){
+        // REGULAR pieces only get promoted, not kings
+        if(selectedPiece.pieceType.equals(PieceType.REGULAR)){
+            if(selectedPiece.color.equals(Color.BLUE) && targetRow == 0){
+                return true;
+            } else if (selectedPiece.color.equals(Color.RED) && targetRow == 7) {
+                return true;
+            }
+        }
+        return false;
     }
 
     private void addPiecesToBoard() {
