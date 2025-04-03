@@ -34,6 +34,7 @@ public class Checkers {
                         @Override
                         public void mouseClicked(MouseEvent e) {
                             System.out.println("SelectedPiece:( " + selectedPieceRow +","+ selectedPieceCol +" )");
+                            selectedPiece.repaint();
                             if (isMoveLegal(targetRow, targetCol)) {
                                 movePiece(selectedPiece, targetRow, targetCol);
                                 if(checkIfSelectedPieceIsToBePromoted(targetRow)) selectedPiece.promoteToKing();

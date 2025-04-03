@@ -15,13 +15,16 @@ class Piece extends JButton {
         setBackground(color);
 
         addActionListener(e -> {
+            Piece oldSelectedPiece = Checkers.selectedPiece; // 1.Repaint previous piece to remove border
+
             Checkers.selectedPiece = this;
+
+            if(oldSelectedPiece != null)oldSelectedPiece.repaint(); // 1.1.Repaint previous piece to remove border
 
             // Find the current row and column of the selected piece
             for (int row = 0; row < Checkers.BOARD_SIZE; row++) {
                 for (int col = 0; col < Checkers.BOARD_SIZE; col++) {
-                    if (Checkers.tiles[row][col].getComponentCount() > 0 &&
-                            Checkers.tiles[row][col].getComponent(0) == this) {
+                    if (Checkers.tiles[row][col].getComponentCount() > 0 && Checkers.tiles[row][col].getComponent(0) == this) {
                         Checkers.selectedPieceRow = row;
                         Checkers.selectedPieceCol = col;
                         System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
@@ -57,6 +60,12 @@ class Piece extends JButton {
             }
             int inset = 15; // Size of the inner circle
             g2.fillOval(inset, inset, getWidth() - 2 * inset, getHeight() - 2 * inset);
+        }
+
+        if (Checkers.selectedPiece == this) {
+            g2.setColor(Color.YELLOW);
+            g2.setStroke(new BasicStroke(3));
+            g2.drawOval(2, 2, getWidth() - 4, getHeight() - 4);
         }
     }
 }
