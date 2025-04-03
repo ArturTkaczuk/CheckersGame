@@ -46,20 +46,31 @@ public class Checkers {
             }
         }
 
-
-
-        // Create and place three pieces at different positions
-        pieces[0][0] = createRoundPiece(Color.RED);
-        pieces[1][1] = createRoundPiece(Color.RED);
-        pieces[2][2] = createRoundPiece(Color.BLUE);
-        pieces[3][3] = createRoundPiece(Color.BLUE);
-
-        placePiece(pieces[0][0], 0, 0);
-        placePiece(pieces[1][1], 1, 1);
-        placePiece(pieces[2][2], 2, 2);
-        placePiece(pieces[3][3], 3, 3);
+        addPiecesToBoard();
 
         frame.setVisible(true);
+    }
+
+    private void addPiecesToBoard() {
+        // Place RED pieces (top three rows)
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if ((row + col) % 2 == 0) { // Place only on black tiles
+                    pieces[row][col] = createRoundPiece(Color.RED);
+                    placePiece(pieces[row][col], row, col);
+                }
+            }
+        }
+
+        // Place BLUE pieces (bottom three rows)
+        for (int row = BOARD_SIZE - 3; row < BOARD_SIZE; row++) {
+            for (int col = 0; col < BOARD_SIZE; col++) {
+                if ((row + col) % 2 == 0) { // Place only on black tiles
+                    pieces[row][col] = createRoundPiece(Color.BLUE);
+                    placePiece(pieces[row][col], row, col);
+                }
+            }
+        }
     }
 
     public static boolean isMoveLegal(int finalRow, int finalCol){
