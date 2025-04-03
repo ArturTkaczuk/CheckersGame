@@ -11,13 +11,10 @@ public class Checkers {
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
 
     public Checkers() {
-        JFrame frame = new JFrame("Checkers");
-        frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setSize(600, 600);
-        frame.setResizable(false);
+        Root root = new Root("Checkers");
 
         JPanel board = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
-        frame.add(board);
+        root.add(board);
 
         // Create chessboard
         for (int row = 0; row < BOARD_SIZE; row++) {
@@ -50,7 +47,7 @@ public class Checkers {
 
         addPiecesToBoard();
 
-        frame.setVisible(true);
+        root.setVisible(true);
     }
 
     public boolean checkIfSelectedPieceIsToBePromoted(int targetRow){
