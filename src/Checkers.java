@@ -4,17 +4,33 @@ import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 
 public class Checkers {
+    // Core game state
     public static final int BOARD_SIZE = 8; // Chessboard size
     public static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
     public static final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE]; // movable pieces
     public static Piece selectedPiece = null; // Currently selected piece
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
 
+    // Top panel state
+    public static GameInformationContainer gameInformationContainer;
+
     public Checkers() {
         Root root = new Root("Checkers");
 
+        // Main container panel with BorderLayout
+        JPanel container = new JPanel(new BorderLayout());
+        container.setPreferredSize(new Dimension(600, 700)); // Fixing the size
+
+        // Add GameInformationContainer at the top
+        gameInformationContainer = new GameInformationContainer();
+        container.add(gameInformationContainer, BorderLayout.NORTH);
+
+        // Create the board and add it to the container (not directly to root)
         JPanel board = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
-        root.add(board);
+        board.setPreferredSize(new Dimension(600, 600));
+        container.add(board, BorderLayout.CENTER);
+
+        root.add(container);
 
         // Create chessboard
         for (int row = 0; row < BOARD_SIZE; row++) {
