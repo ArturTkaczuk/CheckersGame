@@ -8,7 +8,7 @@ public class Checkers {
     public static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
     public static final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE]; // movable pieces
     public static Piece selectedPiece = null; // Currently selected piece
-    public static int selectedRow = -1, selectedCol = -1;
+    public static int selectedPieceRow = -1, selectedPieceCol = -1;
 
     public Checkers() {
         JFrame frame = new JFrame("Checkers");
@@ -33,12 +33,12 @@ public class Checkers {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            System.out.println("SelectedPiece:( " + selectedRow +","+ selectedCol +" )");
+                            System.out.println("SelectedPiece:( " + selectedPieceRow +","+ selectedPieceCol +" )");
                             if (isMoveLegal(finalRow, finalCol)) {
                                 movePiece(selectedPiece, finalRow, finalCol);
                                 selectedPiece = null;
-                                selectedRow = -1;
-                                selectedCol = -1;
+                                selectedPieceRow = -1;
+                                selectedPieceCol = -1;
                             }
                         }
                     });
@@ -46,7 +46,25 @@ public class Checkers {
             }
         }
 
-        addPiecesToBoard();
+//        addPiecesToBoard();
+
+        pieces[0][0] = new Piece(Color.RED);
+        placePiece(pieces[0][0], 0, 0);
+
+        pieces[1][1] = new Piece(Color.RED);
+        placePiece(pieces[1][1], 1, 1);
+
+        pieces[2][2] = new Piece(Color.RED);
+        placePiece(pieces[2][2], 2, 2);
+
+        pieces[5][5] = new Piece(Color.BLUE);
+        placePiece(pieces[5][5], 5, 5);
+
+        pieces[6][6] = new Piece(Color.BLUE);
+        placePiece(pieces[6][6], 6, 6);
+
+        pieces[7][7] = new Piece(Color.BLUE);
+        placePiece(pieces[7][7], 7, 7);
 
         frame.setVisible(true);
     }
@@ -83,18 +101,18 @@ public class Checkers {
 
         // Allow only legal one-step diagonal movement based on color
         boolean targetTileIsNextToSelectedPiece =
-                (Math.abs(finalCol - selectedCol) == 1) &&
-                ((isRedPiece && finalRow == selectedRow + 1) || (isBluePiece && finalRow == selectedRow - 1));
+                (Math.abs(finalCol - selectedPieceCol) == 1) &&
+                ((isRedPiece && finalRow == selectedPieceRow + 1) || (isBluePiece && finalRow == selectedPieceRow - 1));
 
 
 
         // #################### JUMPING OVER PIECE LOGIC ###################################
         // Calculate middle tile coordinates
-        int middleRow = (selectedRow + finalRow) / 2;
-        int middleCol = (selectedCol + finalCol) / 2;
+        int middleRow = (selectedPieceRow + finalRow) / 2;
+        int middleCol = (selectedPieceCol + finalCol) / 2;
 
         // Check if a jump move is valid
-        boolean isJumpValid = (Math.abs(finalRow - selectedRow) == 2 && Math.abs(finalCol - selectedCol) == 2);
+        boolean isJumpValid = (Math.abs(finalRow - selectedPieceRow) == 2 && Math.abs(finalCol - selectedPieceCol) == 2);
         boolean middleTileHasEnemyPiece = tiles[middleRow][middleCol].getComponentCount() == 1 && isEnemyPiece(middleRow, middleCol);
         boolean canJumpOverEnemyPiece = isJumpValid && middleTileHasEnemyPiece;
 
@@ -110,8 +128,8 @@ public class Checkers {
             return true;
         } else {
             selectedPiece = null;
-            selectedRow = -1;
-            selectedCol = -1;
+            selectedPieceRow = -1;
+            selectedPieceCol = -1;
             return false;
         }
     }

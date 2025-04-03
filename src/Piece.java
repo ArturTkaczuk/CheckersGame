@@ -3,6 +3,7 @@ import java.awt.*;
 
 class Piece extends JButton {
     public final Color color;
+    public final PieceType pieceType = PieceType.REGULAR;
 
     public Piece(Color color) {
         this.color = color;
@@ -30,9 +31,9 @@ class Piece extends JButton {
             for (int row = 0; row < Checkers.BOARD_SIZE; row++) {
                 for (int col = 0; col < Checkers.BOARD_SIZE; col++) {
                     if (Checkers.tiles[row][col].getComponentCount() > 0 && Checkers.tiles[row][col].getComponent(0) == this) {
-                        Checkers.selectedRow = row;
-                        Checkers.selectedCol = col;
-                        System.out.println("SelectedPiece:( " + Checkers.selectedRow +","+ Checkers.selectedCol +" )");
+                        Checkers.selectedPieceRow = row;
+                        Checkers.selectedPieceCol = col;
+                        System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
                         return;
                     }
                 }
