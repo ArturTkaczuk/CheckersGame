@@ -46,6 +46,8 @@ public class Checkers {
             }
         }
 
+
+
         // Create and place three pieces at different positions
         pieces[0][0] = createRoundPiece(Color.RED);
         pieces[1][1] = createRoundPiece(Color.RED);
@@ -63,8 +65,19 @@ public class Checkers {
     public static boolean isMoveLegal(int finalRow, int finalCol){
         boolean pieceToMoveIsSelected = selectedPiece != null;
         boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
-        boolean targetTileIsNextToSelectedPiece = (Math.abs(finalRow - selectedRow) == 1 && Math.abs(finalCol - selectedCol) == 1);
 
+        // #################### MOVE LOGIC #################################################
+        boolean isRedPiece = selectedPiece.getBackground().equals(Color.RED);
+        boolean isBluePiece = selectedPiece.getBackground().equals(Color.BLUE);
+
+        // Allow only legal one-step diagonal movement based on color
+        boolean targetTileIsNextToSelectedPiece =
+                (Math.abs(finalCol - selectedCol) == 1) &&
+                ((isRedPiece && finalRow == selectedRow + 1) || (isBluePiece && finalRow == selectedRow - 1));
+
+
+
+        // #################### JUMPING OVER PIECE LOGIC ###################################
         // Calculate middle tile coordinates
         int middleRow = (selectedRow + finalRow) / 2;
         int middleCol = (selectedCol + finalCol) / 2;
@@ -72,9 +85,10 @@ public class Checkers {
         // Check if a jump move is valid
         boolean isJumpValid = (Math.abs(finalRow - selectedRow) == 2 && Math.abs(finalCol - selectedCol) == 2);
         boolean middleTileHasEnemyPiece = tiles[middleRow][middleCol].getComponentCount() == 1 && isEnemyPiece(middleRow, middleCol);
-
         boolean canJumpOverEnemyPiece = isJumpValid && middleTileHasEnemyPiece;
 
+
+        // #################### ALL LOGIC COMBINED TO FINAL IF STATEMENT ####################
         if(pieceToMoveIsSelected && targetTileIsNotOccupied && (targetTileIsNextToSelectedPiece || canJumpOverEnemyPiece)){
             // if canJumpOverEnemyPiece is true, remove enemy piece from the board
             if(canJumpOverEnemyPiece){
