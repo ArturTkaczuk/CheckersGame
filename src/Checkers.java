@@ -10,6 +10,7 @@ public class Checkers {
     public static final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE]; // movable pieces
     public static Piece selectedPiece = null; // Currently selected piece
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
+    public static PlayerTurn playerTurn = PlayerTurn.BLUE; // Default starting player is BLUE
 
     // Top panel state
     public static GameInformationContainer gameInformationContainer;
@@ -46,6 +47,7 @@ public class Checkers {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
+                            switchPlayerTurn();
                             System.out.println("SelectedPiece:( " + selectedPieceRow +","+ selectedPieceCol +" )");
                             selectedPiece.repaint();
                             if (isMoveLegal(targetRow, targetCol)) {
@@ -64,6 +66,17 @@ public class Checkers {
         addPiecesToBoard();
 
         root.setVisible(true);
+    }
+
+    public static void switchPlayerTurn(){
+        if(playerTurn == PlayerTurn.RED){
+            playerTurn = PlayerTurn.BLUE;
+            gameInformationContainer.setCurrentPlayer(PlayerTurn.BLUE);
+        }
+        else if(playerTurn == PlayerTurn.BLUE){
+            playerTurn = PlayerTurn.RED;
+            gameInformationContainer.setCurrentPlayer(PlayerTurn.RED);
+        }
     }
 
     public boolean checkIfSelectedPieceIsToBePromoted(int targetRow){

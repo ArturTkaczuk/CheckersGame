@@ -18,13 +18,13 @@ public class GameInformationContainer extends JPanel {
         // Current player label
         currentPlayerLabel = new JLabel();
         currentPlayerLabel.setFont(new Font("Arial", Font.BOLD, 24));
-        setCurrentPlayer("RED"); // Default to RED
+        setCurrentPlayer(Checkers.playerTurn); // Default player
         playerTurnPanel.add(currentPlayerLabel);
 
-        this.add(Box.createVerticalStrut(20));
+        this.add(Box.createVerticalStrut(10));
 
         // Timer panel (for RED and BLUE timers)
-        JPanel timerPanel = new JPanel(new GridLayout(1, 2, 50, 0)); // 50px gap
+        JPanel timerPanel = new JPanel(new GridLayout(1, 2, 20, 0));
         this.add(timerPanel);
 
         // Red player timer
@@ -39,8 +39,8 @@ public class GameInformationContainer extends JPanel {
     }
 
     // Update the current player label with color
-    public void setCurrentPlayer(String player) {
-        String colorCode = player.equalsIgnoreCase("RED") ? "red" : "blue";
+    public void setCurrentPlayer(PlayerTurn player) {
+        String colorCode = player.equals(PlayerTurn.RED) ? "red" : "blue";
         currentPlayerLabel.setText("<html><b>PLAYER TURN: <span style='color:" + colorCode + ";'>" + player + "</span></b></html>");
     }
 
