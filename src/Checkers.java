@@ -6,8 +6,8 @@ import java.awt.event.MouseEvent;
 public class Checkers {
     public static final int BOARD_SIZE = 8; // Chessboard size
     public static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
-    public static final JButton[][] pieces = new JButton[BOARD_SIZE][BOARD_SIZE]; // movable pieces
-    public static JButton selectedPiece = null; // Currently selected piece
+    public static final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE]; // movable pieces
+    public static Piece selectedPiece = null; // Currently selected piece
     public static int selectedRow = -1, selectedCol = -1;
 
     public Checkers() {
@@ -27,7 +27,7 @@ public class Checkers {
                 tiles[row][col] = tile;
                 board.add(tile);
 
-                // If tile is Black - add mouseListener to move the selected piece
+                // If tile is Black - add mouseListener to move the selected tile
                 if(tile.getBackground().equals(Color.BLACK)){
                     int finalRow = row, finalCol = col;
                     tile.addMouseListener(new MouseAdapter() {
@@ -56,7 +56,7 @@ public class Checkers {
         for (int row = 0; row < 3; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if ((row + col) % 2 == 0) { // Place only on black tiles
-                    pieces[row][col] = createRoundPiece(Color.RED);
+                    pieces[row][col] = new Piece(Color.RED);
                     placePiece(pieces[row][col], row, col);
                 }
             }
@@ -66,7 +66,7 @@ public class Checkers {
         for (int row = BOARD_SIZE - 3; row < BOARD_SIZE; row++) {
             for (int col = 0; col < BOARD_SIZE; col++) {
                 if ((row + col) % 2 == 0) { // Place only on black tiles
-                    pieces[row][col] = createRoundPiece(Color.BLUE);
+                    pieces[row][col] = new Piece(Color.BLUE);
                     placePiece(pieces[row][col], row, col);
                 }
             }
@@ -78,8 +78,8 @@ public class Checkers {
         boolean targetTileIsNotOccupied = tiles[finalRow][finalCol].getComponentCount() == 0;
 
         // #################### MOVE LOGIC #################################################
-        boolean isRedPiece = selectedPiece.getBackground().equals(Color.RED);
-        boolean isBluePiece = selectedPiece.getBackground().equals(Color.BLUE);
+        boolean isRedPiece = selectedPiece.color.equals(Color.RED);
+        boolean isBluePiece = selectedPiece.color.equals(Color.BLUE);
 
         // Allow only legal one-step diagonal movement based on color
         boolean targetTileIsNextToSelectedPiece =
@@ -121,64 +121,22 @@ public class Checkers {
             return false; // No piece in the middle tile
         }
 
-        JButton piece = (JButton) tiles[row][col].getComponent(0);
+        Piece piece = (Piece) tiles[row][col].getComponent(0);
 
         // Assuming Red pieces play against Blue pieces
-        return (selectedPiece.getBackground() == Color.RED && piece.getBackground() == Color.BLUE) ||
-                (selectedPiece.getBackground() == Color.BLUE && piece.getBackground() == Color.RED);
-    }
-
-
-    // Create a round button representing a piece
-    public JButton createRoundPiece(Color color) {
-        JButton piece = new JButton();
-        piece.setPreferredSize(new Dimension(55, 55));
-        piece.setContentAreaFilled(false);
-        piece.setFocusPainted(false);
-        piece.setBorderPainted(false);
-        piece.setOpaque(false);
-        piece.setBackground(color);
-
-        // Custom painting to make it round
-        piece.setUI(new javax.swing.plaf.basic.BasicButtonUI() {
-            @Override
-            public void paint(Graphics g, JComponent c) {
-                Graphics2D g2 = (Graphics2D) g;
-                g2.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-                g2.setColor(piece.getBackground());
-                g2.fillOval(0, 0, c.getWidth(), c.getHeight());
-            }
-        });
-
-        // Select the piece when clicked
-        piece.addActionListener(e -> {
-            selectedPiece = piece;
-
-            // Find the current row and column of the selected piece
-            for (int row = 0; row < BOARD_SIZE; row++) {
-                for (int col = 0; col < BOARD_SIZE; col++) {
-                    if (tiles[row][col].getComponentCount() > 0 && tiles[row][col].getComponent(0) == piece) {
-                        selectedRow = row;
-                        selectedCol = col;
-                        System.out.println("SelectedPiece:( " + selectedRow +","+ selectedCol +" )");
-                        return;
-                    }
-                }
-            }
-        });
-
-        return piece;
+        return (selectedPiece.color.equals(Color.RED) && piece.color.equals(Color.BLUE)) ||
+                (selectedPiece.color.equals(Color.BLUE) && piece.color.equals(Color.RED));
     }
 
     // Place a piece on the board
-    public void placePiece(JButton piece, int row, int col) {
+    public void placePiece(Piece piece, int row, int col) {
         tiles[row][col].add(piece);
         tiles[row][col].revalidate();
         tiles[row][col].repaint();
     }
 
     // Move the selected piece to a new tile
-    public void movePiece(JButton piece, int row, int col) {
+    public void movePiece(Piece piece, int row, int col) {
         // Remove the piece from the previous position
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
