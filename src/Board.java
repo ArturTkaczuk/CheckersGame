@@ -30,7 +30,7 @@ public class Board extends JPanel {
                             System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
                             Checkers.selectedPiece.repaint();
                             if (Checkers.isMoveLegal(targetRow, targetCol)) {
-                                Checkers.movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
+                                movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
                                 if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
                                 Checkers.selectedPiece = null;
                                 Checkers.selectedPieceRow = -1;
@@ -67,8 +67,23 @@ public class Board extends JPanel {
 
     // Place a piece on the board
     public void placePieceOnBoard(Piece piece, int row, int col) {
-        Board.tiles[row][col].add(piece);
-        Board.tiles[row][col].revalidate();
-        Board.tiles[row][col].repaint();
+        tiles[row][col].add(piece);
+        tiles[row][col].revalidate();
+        tiles[row][col].repaint();
+    }
+
+    public static void movePieceOnBoard(Piece piece, int row, int col) {
+        // Remove the piece from the previous position
+        for (int r = 0; r < BOARD_SIZE; r++) {
+            for (int c = 0; c < BOARD_SIZE; c++) {
+                tiles[r][c].remove(piece);
+                tiles[r][c].revalidate();
+                tiles[r][c].repaint();
+            }
+        }
+        // Add the piece to the new position
+        tiles[row][col].add(piece);
+        tiles[row][col].revalidate();
+        tiles[row][col].repaint();
     }
 }

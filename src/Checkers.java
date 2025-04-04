@@ -116,22 +116,6 @@ public class Checkers {
                 (selectedPiece.color.equals(Color.BLUE) && piece.color.equals(Color.RED));
     }
 
-    // Move the selected piece to a new tile
-    public static void movePieceOnBoard(Piece piece, int row, int col) {
-        // Remove the piece from the previous position
-        for (int r = 0; r < Board.BOARD_SIZE; r++) {
-            for (int c = 0; c < Board.BOARD_SIZE; c++) {
-                Board.tiles[r][c].remove(piece);
-                Board.tiles[r][c].revalidate();
-                Board.tiles[r][c].repaint();
-            }
-        }
-        // Add the piece to the new position
-        Board.tiles[row][col].add(piece);
-        Board.tiles[row][col].revalidate();
-        Board.tiles[row][col].repaint();
-    }
-
     public static void main(String[] args) {
         new Checkers();
     }
