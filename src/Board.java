@@ -49,7 +49,7 @@ public class Board extends JPanel {
             for (int col = 0; col < Board.BOARD_SIZE; col++) {
                 if ((row + col) % 2 == 0) { // Place only on black tiles
                     pieces[row][col] = new Piece(Color.RED);
-                    Checkers.placePieceOnBoard(pieces[row][col], row, col);
+                    placePieceOnBoard(pieces[row][col], row, col);
                 }
             }
         }
@@ -59,9 +59,16 @@ public class Board extends JPanel {
             for (int col = 0; col < Board.BOARD_SIZE; col++) {
                 if ((row + col) % 2 == 0) { // Place only on black tiles
                     pieces[row][col] = new Piece(Color.BLUE);
-                    Checkers.placePieceOnBoard(pieces[row][col], row, col);
+                    placePieceOnBoard(pieces[row][col], row, col);
                 }
             }
         }
+    }
+
+    // Place a piece on the board
+    public void placePieceOnBoard(Piece piece, int row, int col) {
+        Board.tiles[row][col].add(piece);
+        Board.tiles[row][col].revalidate();
+        Board.tiles[row][col].repaint();
     }
 }

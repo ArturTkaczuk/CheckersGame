@@ -116,13 +116,6 @@ public class Checkers {
                 (selectedPiece.color.equals(Color.BLUE) && piece.color.equals(Color.RED));
     }
 
-    // Place a piece on the board
-    public static void placePieceOnBoard(Piece piece, int row, int col) {
-        Board.tiles[row][col].add(piece);
-        Board.tiles[row][col].revalidate();
-        Board.tiles[row][col].repaint();
-    }
-
     // Move the selected piece to a new tile
     public static void movePiece(Piece piece, int row, int col) {
         // Remove the piece from the previous position
