@@ -1,7 +1,5 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.MouseAdapter;
-import java.awt.event.MouseEvent;
 
 public class Checkers {
     // Core game state
@@ -63,7 +61,7 @@ public class Checkers {
             for (int col = 0; col < Board.BOARD_SIZE; col++) {
                 if ((row + col) % 2 == 0) { // Place only on black tiles
                     Board.pieces[row][col] = new Piece(Color.RED);
-                    placePiece(Board.pieces[row][col], row, col);
+                    placePieceOnBoard(Board.pieces[row][col], row, col);
                 }
             }
         }
@@ -73,7 +71,7 @@ public class Checkers {
             for (int col = 0; col < Board.BOARD_SIZE; col++) {
                 if ((row + col) % 2 == 0) { // Place only on black tiles
                     Board.pieces[row][col] = new Piece(Color.BLUE);
-                    placePiece(Board.pieces[row][col], row, col);
+                    placePieceOnBoard(Board.pieces[row][col], row, col);
                 }
             }
         }
@@ -141,7 +139,7 @@ public class Checkers {
     }
 
     // Place a piece on the board
-    public void placePiece(Piece piece, int row, int col) {
+    public void placePieceOnBoard(Piece piece, int row, int col) {
         Board.tiles[row][col].add(piece);
         Board.tiles[row][col].revalidate();
         Board.tiles[row][col].repaint();
