@@ -22,9 +22,9 @@ class Piece extends JButton {
             Checkers.selectedPiece = this;
 
             // Find the current row and column of the selected piece
-            for (int row = 0; row < Checkers.BOARD_SIZE; row++) {
-                for (int col = 0; col < Checkers.BOARD_SIZE; col++) {
-                    if (Checkers.tiles[row][col].getComponentCount() > 0 && Checkers.tiles[row][col].getComponent(0) == this) {
+            for (int row = 0; row < Board.BOARD_SIZE; row++) {
+                for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                    if (Board.tiles[row][col].getComponentCount() > 0 && Board.tiles[row][col].getComponent(0) == this) {
                         Checkers.selectedPieceRow = row;
                         Checkers.selectedPieceCol = col;
                         System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
