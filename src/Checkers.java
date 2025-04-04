@@ -117,7 +117,7 @@ public class Checkers {
     }
 
     // Move the selected piece to a new tile
-    public static void movePiece(Piece piece, int row, int col) {
+    public static void movePieceOnBoard(Piece piece, int row, int col) {
         // Remove the piece from the previous position
         for (int r = 0; r < Board.BOARD_SIZE; r++) {
             for (int c = 0; c < Board.BOARD_SIZE; c++) {

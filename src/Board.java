@@ -30,7 +30,7 @@ public class Board extends JPanel {
                             System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
                             Checkers.selectedPiece.repaint();
                             if (Checkers.isMoveLegal(targetRow, targetCol)) {
-                                Checkers.movePiece(Checkers.selectedPiece, targetRow, targetCol);
+                                Checkers.movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
                                 if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
                                 Checkers.selectedPiece = null;
                                 Checkers.selectedPieceRow = -1;
