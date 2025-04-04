@@ -15,11 +15,11 @@ class Piece extends JButton {
         setBackground(color);
 
         addActionListener(e -> {
-            Piece oldSelectedPiece = Checkers.selectedPiece; // 1.Repaint previous piece to remove border
+            // Repaint previous piece to remove border
+            Piece oldSelectedPiece = Checkers.selectedPiece;
+            if(oldSelectedPiece != null)oldSelectedPiece.repaint();
 
             Checkers.selectedPiece = this;
-
-            if(oldSelectedPiece != null)oldSelectedPiece.repaint(); // 1.1.Repaint previous piece to remove border
 
             // Find the current row and column of the selected piece
             for (int row = 0; row < Checkers.BOARD_SIZE; row++) {
