@@ -5,6 +5,10 @@ public class GameInformationContainer extends JPanel {
     public JLabel currentPlayerLabel;
     public JLabel redTimerLabel;
     public JLabel blueTimerLabel;
+    public Timer redTimer;
+    public Timer blueTimer;
+    public int redSecondsLeft = 20;   // Example: 1m 20s = 80 seconds
+    public int blueSecondsLeft = 20;
 
     public GameInformationContainer() {
         this.setPreferredSize(new Dimension(600, 100));
@@ -34,14 +38,16 @@ public class GameInformationContainer extends JPanel {
         this.add(timerPanel);
 
         // Red player timer
-        redTimerLabel = new JLabel("RED Time Left: 1m 20s", SwingConstants.LEFT);
+        redTimerLabel = new JLabel("RED Time Left: " + formatTime(redSecondsLeft), SwingConstants.LEFT);
         redTimerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         timerPanel.add(redTimerLabel);
 
         // Blue player timer
-        blueTimerLabel = new JLabel("BLUE Time Left: 1m 20s", SwingConstants.RIGHT);
+        blueTimerLabel = new JLabel("BLUE Time Left: " + formatTime(blueSecondsLeft), SwingConstants.RIGHT);
         blueTimerLabel.setFont(new Font("Arial", Font.BOLD, 16));
         timerPanel.add(blueTimerLabel);
+
+        startTimers();
     }
 
     // Update the current player label with color
@@ -57,5 +63,61 @@ public class GameInformationContainer extends JPanel {
 
     public void updateBlueTimer(String time) {
         blueTimerLabel.setText("BLUE Time Left: " + time);
+    }
+
+    public String formatTime(int totalSeconds) {
+        int minutes = totalSeconds / 60;
+        int seconds = totalSeconds % 60;
+        return String.format("%dm %02ds", minutes, seconds);
+    }
+
+    public void startTimers() {
+        redTimer = new Timer(1000, e -> {
+            // After any timer reaches 0, stop both
+            if(blueSecondsLeft == 0 || redSecondsLeft == 0){
+                return;
+            }
+
+            if (Checkers.playerTurn == PlayerTurn.RED) {
+                redSecondsLeft--;
+                updateRedTimer(formatTime(redSecondsLeft));
+            }
+        });
+
+        blueTimer = new Timer(1000, e -> {
+            // After any timer reaches 0, stop both
+            if(blueSecondsLeft == 0 || redSecondsLeft == 0){
+                return;
+            }
+
+            if (Checkers.playerTurn == PlayerTurn.BLUE) {
+                blueSecondsLeft--;
+                updateBlueTimer(formatTime(blueSecondsLeft));
+            }
+        });
+
+        redTimer.start();
+        blueTimer.start();
+    }
+
+
+    public void resetTimers() {
+        redSecondsLeft = 80;
+        blueSecondsLeft = 80;
+        updateRedTimer(formatTime(redSecondsLeft));
+        updateBlueTimer(formatTime(blueSecondsLeft));
+    }
+
+    public void stopRedTimer(){
+        if (redTimer != null) redTimer.stop();
+    }
+
+    public void stopBlueTimer(){
+        if (blueTimer != null) blueTimer.stop();
+    }
+
+    public void stopBothTimers() {
+        stopRedTimer();
+        stopBlueTimer();
     }
 }
