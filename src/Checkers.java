@@ -27,41 +27,45 @@ public class Checkers {
         container.add(gameInformationContainer, BorderLayout.NORTH);
 
         // Create the board and add it to the container (not directly to root)
-        JPanel board = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
-        board.setPreferredSize(new Dimension(600, 600));
+//        JPanel board = new JPanel(new GridLayout(BOARD_SIZE, BOARD_SIZE));
+//        board.setPreferredSize(new Dimension(600, 600));
+        Board board = new Board();
+
+
+
         container.add(board, BorderLayout.CENTER);
 
         root.add(container);
 
         // Create chessboard
-        for (int row = 0; row < BOARD_SIZE; row++) {
-            for (int col = 0; col < BOARD_SIZE; col++) {
-                JPanel tile = new JPanel();
-                tile.setBackground((row + col) % 2 == 0 ? Color.BLACK : Color.WHITE);
-                tiles[row][col] = tile;
-                board.add(tile);
-
-                // If tile is Black - add mouseListener to move the selected tile
-                if(tile.getBackground().equals(Color.BLACK)){
-                    int targetRow = row, targetCol = col;
-                    tile.addMouseListener(new MouseAdapter() {
-                        @Override
-                        public void mouseClicked(MouseEvent e) {
-                            switchPlayerTurn();
-                            System.out.println("SelectedPiece:( " + selectedPieceRow +","+ selectedPieceCol +" )");
-                            selectedPiece.repaint();
-                            if (isMoveLegal(targetRow, targetCol)) {
-                                movePiece(selectedPiece, targetRow, targetCol);
-                                if(checkIfSelectedPieceIsToBePromoted(targetRow)) selectedPiece.promoteToKing();
-                                selectedPiece = null;
-                                selectedPieceRow = -1;
-                                selectedPieceCol = -1;
-                            }
-                        }
-                    });
-                }
-            }
-        }
+//        for (int row = 0; row < BOARD_SIZE; row++) {
+//            for (int col = 0; col < BOARD_SIZE; col++) {
+//                JPanel tile = new JPanel();
+//                tile.setBackground((row + col) % 2 == 0 ? Color.BLACK : Color.WHITE);
+//                tiles[row][col] = tile;
+//                board.add(tile);
+//
+//                // If tile is Black - add mouseListener to move the selected tile
+//                if(tile.getBackground().equals(Color.BLACK)){
+//                    int targetRow = row, targetCol = col;
+//                    tile.addMouseListener(new MouseAdapter() {
+//                        @Override
+//                        public void mouseClicked(MouseEvent e) {
+//                            switchPlayerTurn();
+//                            System.out.println("SelectedPiece:( " + selectedPieceRow +","+ selectedPieceCol +" )");
+//                            selectedPiece.repaint();
+//                            if (isMoveLegal(targetRow, targetCol)) {
+//                                movePiece(selectedPiece, targetRow, targetCol);
+//                                if(checkIfSelectedPieceIsToBePromoted(targetRow)) selectedPiece.promoteToKing();
+//                                selectedPiece = null;
+//                                selectedPieceRow = -1;
+//                                selectedPieceCol = -1;
+//                            }
+//                        }
+//                    });
+//                }
+//            }
+//        }
 
         addPiecesToBoard();
 
@@ -79,7 +83,7 @@ public class Checkers {
         }
     }
 
-    public boolean checkIfSelectedPieceIsToBePromoted(int targetRow){
+    public static boolean checkIfSelectedPieceIsToBePromoted(int targetRow){
         // REGULAR pieces only get promoted, not kings
         if(selectedPiece.pieceType.equals(PieceType.REGULAR)){
             if(selectedPiece.color.equals(Color.BLUE) && targetRow == 0){
@@ -182,7 +186,7 @@ public class Checkers {
     }
 
     // Move the selected piece to a new tile
-    public void movePiece(Piece piece, int row, int col) {
+    public static void movePiece(Piece piece, int row, int col) {
         // Remove the piece from the previous position
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
