@@ -21,13 +21,13 @@ class Piece extends JButton {
 
             // ################## Select piece logic - player turn #########################
             // RED player can only select RED piece
-            if(Checkers.playerTurn == PlayerTurn.RED && this.color != Color.RED){
-                return;
-            }
-            // BLUE player can only select BLUE piece
-            if(Checkers.playerTurn == PlayerTurn.BLUE && this.color != Color.BLUE){
-                return;
-            }
+//            if(Checkers.playerTurn == PlayerTurn.RED && this.color != Color.RED){
+//                return;
+//            }
+//            // BLUE player can only select BLUE piece
+//            if(Checkers.playerTurn == PlayerTurn.BLUE && this.color != Color.BLUE){
+//                return;
+//            }
 
             Checkers.selectedPiece = this;
 
