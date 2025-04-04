@@ -27,7 +27,7 @@ public class Checkers {
 
         root.add(container);
 
-        addPiecesToBoard();
+        board.addPiecesToBoard();
 
         root.setVisible(true);
     }
@@ -53,28 +53,6 @@ public class Checkers {
             }
         }
         return false;
-    }
-
-    private void addPiecesToBoard() {
-        // Place RED pieces (top three rows)
-        for (int row = 0; row < 3; row++) {
-            for (int col = 0; col < Board.BOARD_SIZE; col++) {
-                if ((row + col) % 2 == 0) { // Place only on black tiles
-                    Board.pieces[row][col] = new Piece(Color.RED);
-                    placePieceOnBoard(Board.pieces[row][col], row, col);
-                }
-            }
-        }
-
-        // Place BLUE pieces (bottom three rows)
-        for (int row = Board.BOARD_SIZE - 3; row < Board.BOARD_SIZE; row++) {
-            for (int col = 0; col < Board.BOARD_SIZE; col++) {
-                if ((row + col) % 2 == 0) { // Place only on black tiles
-                    Board.pieces[row][col] = new Piece(Color.BLUE);
-                    placePieceOnBoard(Board.pieces[row][col], row, col);
-                }
-            }
-        }
     }
 
     public static boolean isMoveLegal(int finalRow, int finalCol){
@@ -139,7 +117,7 @@ public class Checkers {
     }
 
     // Place a piece on the board
-    public void placePieceOnBoard(Piece piece, int row, int col) {
+    public static void placePieceOnBoard(Piece piece, int row, int col) {
         Board.tiles[row][col].add(piece);
         Board.tiles[row][col].revalidate();
         Board.tiles[row][col].repaint();

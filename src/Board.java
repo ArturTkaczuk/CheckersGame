@@ -42,4 +42,26 @@ public class Board extends JPanel {
             }
         }
     }
+
+    public void addPiecesToBoard() {
+        // Place RED pieces (top three rows)
+        for (int row = 0; row < 3; row++) {
+            for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                if ((row + col) % 2 == 0) { // Place only on black tiles
+                    pieces[row][col] = new Piece(Color.RED);
+                    Checkers.placePieceOnBoard(pieces[row][col], row, col);
+                }
+            }
+        }
+
+        // Place BLUE pieces (bottom three rows)
+        for (int row = Board.BOARD_SIZE - 3; row < Board.BOARD_SIZE; row++) {
+            for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                if ((row + col) % 2 == 0) { // Place only on black tiles
+                    pieces[row][col] = new Piece(Color.BLUE);
+                    Checkers.placePieceOnBoard(pieces[row][col], row, col);
+                }
+            }
+        }
+    }
 }
