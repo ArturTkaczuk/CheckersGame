@@ -26,7 +26,6 @@ public class Board extends JPanel {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            Checkers.switchPlayerTurn();
                             System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
                             Checkers.selectedPiece.repaint();
                             if (Checkers.isMoveLegal(targetRow, targetCol)) {

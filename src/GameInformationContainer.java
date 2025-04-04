@@ -19,8 +19,14 @@ public class GameInformationContainer extends JPanel {
         currentPlayerLabel = new JLabel();
         currentPlayerLabel.setFont(new Font("Arial", Font.BOLD, 24));
         setCurrentPlayer(Checkers.playerTurn); // Default player
+        // On label click change playerTurn
+        currentPlayerLabel.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseClicked(java.awt.event.MouseEvent e) {
+                Checkers.switchPlayerTurn();
+            }
+        });
         playerTurnPanel.add(currentPlayerLabel);
-
         this.add(Box.createVerticalStrut(10));
 
         // Timer panel (for RED and BLUE timers)
