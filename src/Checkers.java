@@ -7,7 +7,6 @@ public class Checkers {
     public static Piece selectedPiece = null; // Currently selected piece
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
     public static PlayerTurn playerTurn = PlayerTurn.BLUE; // Default starting player is BLUE
-    public static List<Piece> legalMovePieces = new ArrayList<>();
 
     // Top panel
     public static GameInformationContainer gameInformationContainer;
@@ -90,6 +89,11 @@ public class Checkers {
                     (Math.abs(finalRow - pieceRow) == 1 && Math.abs(finalCol - pieceCol) == 1);
         }
 
+        // #################### MOVE BY ONE IS NOT ALLOWED IF THERE IS JUMP MOVE AVAILABLE #
+        if (isAvailableJumpMove(piece) && targetTileIsNextToPiece){
+            return false;
+        }
+
         // #################### JUMPING OVER PIECE LOGIC ###################################
         int middleRow = (pieceRow + finalRow) / 2;
         int middleCol = (pieceCol + finalCol) / 2;
@@ -112,28 +116,57 @@ public class Checkers {
         return false;
     }
 
-    // TODO:
-    public void updateLegalMovePieces(){
-        // clear last player's list
-        legalMovePieces.clear();
-
-        // add all current player's pieces
-
+    public static boolean isAvailableJumpMove(Piece piece) {
+        // Find piece position
+        int pieceRow = -1, pieceCol = -1;
         for (int row = 0; row < Board.BOARD_SIZE; row++) {
             for (int col = 0; col < Board.BOARD_SIZE; col++) {
-                Component[] pieces = Board.tiles[row][col].getComponents();
-
-                if (pieces.length > 0 && pieces[0] instanceof Piece) {
-                    Piece piece = (Piece) pieces[0];
-
-                    // Check if the piece belongs to the current player
-                    if ((playerTurn == PlayerTurn.RED && piece.color == Color.RED) ||
-                            (playerTurn == PlayerTurn.BLUE && piece.color == Color.BLUE)) {
-                        legalMovePieces.add(piece); // Add piece to list
-                    }
+                if (Board.tiles[row][col].getComponentCount() > 0 &&
+                        Board.tiles[row][col].getComponent(0) == piece) {
+                    pieceRow = row;
+                    pieceCol = col;
+                    break;
                 }
             }
         }
+
+        if (pieceRow == -1 || pieceCol == -1) return false;
+
+        // Define all possible jump directions: (dy, dx)
+        int[][] directions;
+        if (piece.pieceType == PieceType.KING) {
+            directions = new int[][] { {-2, -2}, {-2, 2}, {2, -2}, {2, 2} };
+        } else if (piece.color.equals(Color.RED)) {
+            directions = new int[][] { {2, -2}, {2, 2} }; // Red moves downward
+        } else {
+            directions = new int[][] { {-2, -2}, {-2, 2} }; // Blue moves upward
+        }
+
+        for (int[] dir : directions) {
+            int targetRow = pieceRow + dir[0];
+            int targetCol = pieceCol + dir[1];
+
+            // Check board boundaries
+            if (targetRow < 0 || targetRow >= Board.BOARD_SIZE ||
+                    targetCol < 0 || targetCol >= Board.BOARD_SIZE) {
+                continue;
+            }
+
+            // Check destination tile is empty
+            if (Board.tiles[targetRow][targetCol].getComponentCount() != 0) continue;
+
+            // Middle tile coordinates
+            int middleRow = (pieceRow + targetRow) / 2;
+            int middleCol = (pieceCol + targetCol) / 2;
+
+            // Check if middle tile has an enemy piece
+            if (Board.tiles[middleRow][middleCol].getComponentCount() == 1 &&
+                    Checkers.isEnemyPiece(piece, middleRow, middleCol)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 
     public static boolean isEnemyPiece(Piece attacker, int row, int col) {
@@ -147,7 +180,6 @@ public class Checkers {
         // Pieces of different colors are enemies
         return !attacker.color.equals(target.color);
     }
-
 
     public static void main(String[] args) {
         new Checkers();
