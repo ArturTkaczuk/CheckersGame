@@ -68,4 +68,15 @@ class Piece extends JButton {
             g2.drawOval(2, 2, getWidth() - 4, getHeight() - 4);
         }
     }
+
+    public static void repaintAllPieces() {
+        for (int row = 0; row < Board.BOARD_SIZE; row++) {
+            for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                Component[] comps = Board.tiles[row][col].getComponents();
+                for (Component comp : comps) {
+                    comp.repaint();
+                }
+            }
+        }
+    }
 }
