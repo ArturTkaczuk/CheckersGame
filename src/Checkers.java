@@ -57,53 +57,59 @@ public class Checkers {
         return false;
     }
 
-    public static boolean isMoveLegal(int finalRow, int finalCol){
-        boolean pieceToMoveIsSelected = selectedPiece != null;
+    public static boolean isMoveLegal(Piece piece, int finalRow, int finalCol) {
+        // Find the current position of the piece
+        int pieceRow = -1;
+        int pieceCol = -1;
+
+        for (int row = 0; row < Board.BOARD_SIZE; row++) {
+            for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                if (Board.tiles[row][col].getComponentCount() > 0 && Board.tiles[row][col].getComponent(0) == piece) {
+                    pieceRow = row;
+                    pieceCol = col;
+                    break;
+                }
+            }
+        }
+
+        if (pieceRow == -1 || pieceCol == -1) return false; // piece not found
+
         boolean targetTileIsNotOccupied = Board.tiles[finalRow][finalCol].getComponentCount() == 0;
 
         // #################### MOVE LOGIC #################################################
-        // Allow only legal one-step diagonal movement based on color
-        boolean targetTileIsNextToSelectedPiece = false;
+        boolean targetTileIsNextToPiece = false;
 
-        if(selectedPiece.pieceType.equals(PieceType.REGULAR)){
-            boolean isRedPiece = selectedPiece.color.equals(Color.RED);
-            boolean isBluePiece = selectedPiece.color.equals(Color.BLUE);
-            targetTileIsNextToSelectedPiece =
-                (Math.abs(finalCol - selectedPieceCol) == 1) &&
-                ((isRedPiece && finalRow == selectedPieceRow + 1) || (isBluePiece && finalRow == selectedPieceRow - 1));
+        if (piece.pieceType.equals(PieceType.REGULAR)) {
+            boolean isRedPiece = piece.color.equals(Color.RED);
+            boolean isBluePiece = piece.color.equals(Color.BLUE);
+            targetTileIsNextToPiece =
+                    (Math.abs(finalCol - pieceCol) == 1) &&
+                            ((isRedPiece && finalRow == pieceRow + 1) || (isBluePiece && finalRow == pieceRow - 1));
+        } else if (piece.pieceType.equals(PieceType.KING)) {
+            targetTileIsNextToPiece =
+                    (Math.abs(finalRow - pieceRow) == 1 && Math.abs(finalCol - pieceCol) == 1);
         }
-        else if (selectedPiece.pieceType.equals(PieceType.KING)){
-            targetTileIsNextToSelectedPiece =
-                (Math.abs(finalRow - selectedPieceRow) == 1 && Math.abs(finalCol - selectedPieceCol) == 1);
-        }
-
 
         // #################### JUMPING OVER PIECE LOGIC ###################################
-        // Calculate middle tile coordinates
-        int middleRow = (selectedPieceRow + finalRow) / 2;
-        int middleCol = (selectedPieceCol + finalCol) / 2;
+        int middleRow = (pieceRow + finalRow) / 2;
+        int middleCol = (pieceCol + finalCol) / 2;
 
-        // Check if a jump move is valid
-        boolean isJumpValid = (Math.abs(finalRow - selectedPieceRow) == 2 && Math.abs(finalCol - selectedPieceCol) == 2);
-        boolean middleTileHasEnemyPiece = Board.tiles[middleRow][middleCol].getComponentCount() == 1 && isEnemyPiece(middleRow, middleCol);
+        boolean isJumpValid = (Math.abs(finalRow - pieceRow) == 2 && Math.abs(finalCol - pieceCol) == 2);
+        boolean middleTileHasEnemyPiece = Board.tiles[middleRow][middleCol].getComponentCount() == 1 &&
+                isEnemyPiece(piece, middleRow, middleCol);
         boolean canJumpOverEnemyPiece = isJumpValid && middleTileHasEnemyPiece;
 
-
-        // #################### ALL LOGIC COMBINED TO FINAL IF STATEMENT ####################
-        if(pieceToMoveIsSelected && targetTileIsNotOccupied && (targetTileIsNextToSelectedPiece || canJumpOverEnemyPiece)){
-            // if canJumpOverEnemyPiece is true, remove enemy piece from the board
-            if(canJumpOverEnemyPiece){
+        // #################### FINAL CHECK #################################################
+        if (targetTileIsNotOccupied && (targetTileIsNextToPiece || canJumpOverEnemyPiece)) {
+            if (canJumpOverEnemyPiece) {
                 Board.tiles[middleRow][middleCol].removeAll();
                 Board.tiles[middleRow][middleCol].revalidate();
                 Board.tiles[middleRow][middleCol].repaint();
             }
             return true;
-        } else {
-            selectedPiece = null;
-            selectedPieceRow = -1;
-            selectedPieceCol = -1;
-            return false;
         }
+
+        return false;
     }
 
     // TODO:
@@ -130,17 +136,18 @@ public class Checkers {
         }
     }
 
-    public static boolean isEnemyPiece(int row, int col) {
+    public static boolean isEnemyPiece(Piece attacker, int row, int col) {
         if (Board.tiles[row][col].getComponentCount() == 0) {
-            return false; // No piece in the middle tile
+            return false; // No piece on the tile
         }
 
-        Piece piece = (Piece) Board.tiles[row][col].getComponent(0);
+        Component comp = Board.tiles[row][col].getComponent(0);
+        Piece target = (Piece) comp;
 
-        // Assuming Red pieces play against Blue pieces
-        return (selectedPiece.color.equals(Color.RED) && piece.color.equals(Color.BLUE)) ||
-                (selectedPiece.color.equals(Color.BLUE) && piece.color.equals(Color.RED));
+        // Pieces of different colors are enemies
+        return !attacker.color.equals(target.color);
     }
+
 
     public static void main(String[] args) {
         new Checkers();
