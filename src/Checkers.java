@@ -128,45 +128,38 @@ public class Checkers {
                     break;
                 }
             }
+            if (pieceRow != -1) break;
         }
 
         if (pieceRow == -1 || pieceCol == -1) return false;
 
-        // Define all possible jump directions: (dy, dx)
-        int[][] directions;
-        if (piece.pieceType == PieceType.KING) {
-            directions = new int[][] { {-2, -2}, {-2, 2}, {2, -2}, {2, 2} };
-        } else if (piece.color.equals(Color.RED)) {
-            directions = new int[][] { {2, -2}, {2, 2} }; // Red moves downward
-        } else {
-            directions = new int[][] { {-2, -2}, {-2, 2} }; // Blue moves upward
-        }
+        // Check all 4 diagonal jump directions for any piece type
+        int[][] directions = {
+                {-2, -2}, {-2, 2}, {2, -2}, {2, 2}
+        };
 
         for (int[] dir : directions) {
             int targetRow = pieceRow + dir[0];
             int targetCol = pieceCol + dir[1];
 
-            // Check board boundaries
+            // Bounds check
             if (targetRow < 0 || targetRow >= Board.BOARD_SIZE ||
-                    targetCol < 0 || targetCol >= Board.BOARD_SIZE) {
-                continue;
-            }
+                    targetCol < 0 || targetCol >= Board.BOARD_SIZE) continue;
 
-            // Check destination tile is empty
+            // Destination must be empty
             if (Board.tiles[targetRow][targetCol].getComponentCount() != 0) continue;
 
-            // Middle tile coordinates
-            int middleRow = (pieceRow + targetRow) / 2;
-            int middleCol = (pieceCol + targetCol) / 2;
+            // Midpoint check (enemy to jump over)
+            int midRow = (pieceRow + targetRow) / 2;
+            int midCol = (pieceCol + targetCol) / 2;
 
-            // Check if middle tile has an enemy piece
-            if (Board.tiles[middleRow][middleCol].getComponentCount() == 1 &&
-                    Checkers.isEnemyPiece(piece, middleRow, middleCol)) {
-                return true;
+            if (Board.tiles[midRow][midCol].getComponentCount() == 1 &&
+                    isEnemyPiece(piece, midRow, midCol)) {
+                return true; // Valid jump exists
             }
         }
 
-        return false;
+        return false; // No jump available
     }
 
     public static boolean isEnemyPiece(Piece attacker, int row, int col) {
