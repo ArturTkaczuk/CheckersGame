@@ -27,14 +27,14 @@ public class Board extends JPanel {
                         @Override
                         public void mouseClicked(MouseEvent e) {
                             System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
-                            Checkers.selectedPiece.repaint();
-                            if (Checkers.isMoveLegal(targetRow, targetCol)) {
+                            if (Checkers.isMoveLegal(Checkers.selectedPiece, targetRow, targetCol)) {
                                 movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
                                 if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
-                                Checkers.selectedPiece = null;
-                                Checkers.selectedPieceRow = -1;
-                                Checkers.selectedPieceCol = -1;
                             }
+                            Checkers.selectedPiece.repaint();
+                            Checkers.selectedPiece = null;
+                            Checkers.selectedPieceRow = -1;
+                            Checkers.selectedPieceCol = -1;
                         }
                     });
                 }
