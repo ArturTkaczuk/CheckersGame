@@ -15,9 +15,7 @@ class Piece extends JButton {
         setBackground(color);
 
         addActionListener(e -> {
-            // Repaint previous piece to remove border
-            Piece oldSelectedPiece = Checkers.selectedPiece;
-            if(oldSelectedPiece != null)oldSelectedPiece.repaint();
+            repaintAllPieces();
 
             Checkers.selectedPiece = this;
 

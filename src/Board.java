@@ -31,7 +31,7 @@ public class Board extends JPanel {
                                 movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
                                 if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
                             }
-                            Checkers.selectedPiece.repaint();
+                            Piece.repaintAllPieces();
                             Checkers.selectedPiece = null;
                             Checkers.selectedPieceRow = -1;
                             Checkers.selectedPieceCol = -1;
