@@ -1,13 +1,15 @@
 import javax.swing.*;
 import java.awt.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Checkers {
-    // Core game state
     public static Piece selectedPiece = null; // Currently selected piece
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
     public static PlayerTurn playerTurn = PlayerTurn.BLUE; // Default starting player is BLUE
+    public static List<Piece> legalMovePieces = new ArrayList<>();
 
-    // Top panel state
+    // Top panel
     public static GameInformationContainer gameInformationContainer;
 
     public Checkers() {
@@ -101,6 +103,30 @@ public class Checkers {
             selectedPieceRow = -1;
             selectedPieceCol = -1;
             return false;
+        }
+    }
+
+    // TODO:
+    public void updateLegalMovePieces(){
+        // clear last player's list
+        legalMovePieces.clear();
+
+        // add all current player's pieces
+
+        for (int row = 0; row < Board.BOARD_SIZE; row++) {
+            for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                Component[] pieces = Board.tiles[row][col].getComponents();
+
+                if (pieces.length > 0 && pieces[0] instanceof Piece) {
+                    Piece piece = (Piece) pieces[0];
+
+                    // Check if the piece belongs to the current player
+                    if ((playerTurn == PlayerTurn.RED && piece.color == Color.RED) ||
+                            (playerTurn == PlayerTurn.BLUE && piece.color == Color.BLUE)) {
+                        legalMovePieces.add(piece); // Add piece to list
+                    }
+                }
+            }
         }
     }
 
