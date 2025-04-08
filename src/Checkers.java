@@ -57,6 +57,14 @@ public class Checkers {
     }
 
     public static boolean isMoveLegal(Piece piece, int finalRow, int finalCol) {
+        boolean isCurrentPlayersPiece =
+                (playerTurn == PlayerTurn.RED && piece.color.equals(Color.RED)) ||
+                (playerTurn == PlayerTurn.BLUE && piece.color.equals(Color.BLUE));
+
+        if(isCurrentPlayersPiece == false){
+            return false;
+        }
+
         // Find the current position of the piece
         int pieceRow = -1;
         int pieceCol = -1;

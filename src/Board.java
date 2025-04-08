@@ -32,6 +32,9 @@ public class Board extends JPanel {
                                 if(isAvailableJumpMoveForSelectedPiece == false) {
                                     // Selected piece moved by one tile
                                     Checkers.switchPlayerTurn();
+                                } else {
+                                    // Selected piece made a jump move by 2 tiles
+                                    Checkers.switchPlayerTurn();
                                 }
                                 movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
                                 if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
