@@ -7,8 +7,8 @@ public class GameInformationContainer extends JPanel {
     public JLabel blueTimerLabel;
     public Timer redTimer;
     public Timer blueTimer;
-    public int redSecondsLeft = 20;   // Example: 1m 20s = 80 seconds
-    public int blueSecondsLeft = 20;
+    public int redSecondsLeft = 300;   // Example: 1m 20s = 80 seconds
+    public int blueSecondsLeft = 300;
 
     public GameInformationContainer() {
         this.setPreferredSize(new Dimension(600, 100));
