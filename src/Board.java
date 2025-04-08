@@ -31,13 +31,23 @@ public class Board extends JPanel {
                             if (Checkers.isMoveLegal(Checkers.selectedPiece, targetRow, targetCol)) {
                                 if(isAvailableJumpMoveForSelectedPiece == false) {
                                     // Selected piece moved by one tile
+                                    movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
+                                    if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
                                     Checkers.switchPlayerTurn();
                                 } else {
                                     // Selected piece made a jump move by 2 tiles
-                                    Checkers.switchPlayerTurn();
+                                    movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
+                                    if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
+
+                                    if(Checkers.isAvailableJumpMove(Checkers.selectedPiece)){
+                                        // Another jump move for current player is available
+                                        Checkers.pieceThatMadeJumpMoveForCurrentPlayer = Checkers.selectedPiece;
+                                    } else {
+                                        // Another jump move for current player is NOT available
+                                        Checkers.pieceThatMadeJumpMoveForCurrentPlayer = null;
+                                        Checkers.switchPlayerTurn();
+                                    }
                                 }
-                                movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
-                                if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
                             }
                             Piece.repaintAllPieces();
                             Checkers.selectedPiece = null;

@@ -7,6 +7,7 @@ public class Checkers {
     public static Piece selectedPiece = null; // Currently selected piece
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
     public static PlayerTurn playerTurn = PlayerTurn.BLUE; // Default starting player is BLUE
+    public static Piece pieceThatMadeJumpMoveForCurrentPlayer = null;
 
     // Top panel
     public static GameInformationContainer gameInformationContainer;
@@ -62,6 +63,11 @@ public class Checkers {
                 (playerTurn == PlayerTurn.BLUE && piece.color.equals(Color.BLUE));
 
         if(isCurrentPlayersPiece == false){
+            return false;
+        }
+
+        // if pieceThatMadeJumpMoveForCurrentPlayer is not null and this piece isn't a pieceThatMadeJumpMoveForCurrentPlayer, return false
+        if(Checkers.pieceThatMadeJumpMoveForCurrentPlayer != null && piece != Checkers.pieceThatMadeJumpMoveForCurrentPlayer){
             return false;
         }
 
