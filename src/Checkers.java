@@ -190,7 +190,6 @@ public class Checkers {
         return false;
     }
 
-
     public static boolean isEnemyPiece(Piece attacker, int row, int col) {
         if (Board.tiles[row][col].getComponentCount() == 0) {
             return false; // No piece on the tile

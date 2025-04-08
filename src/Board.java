@@ -27,7 +27,12 @@ public class Board extends JPanel {
                         @Override
                         public void mouseClicked(MouseEvent e) {
                             System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
+                            boolean isAvailableJumpMoveForSelectedPiece = Checkers.isAvailableJumpMove(Checkers.selectedPiece);
                             if (Checkers.isMoveLegal(Checkers.selectedPiece, targetRow, targetCol)) {
+                                if(isAvailableJumpMoveForSelectedPiece == false) {
+                                    // Selected piece moved by one tile
+                                    Checkers.switchPlayerTurn();
+                                }
                                 movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
                                 if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
                             }
