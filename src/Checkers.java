@@ -89,12 +89,18 @@ public class Checkers {
                     (Math.abs(finalRow - pieceRow) == 1 && Math.abs(finalCol - pieceCol) == 1);
         }
 
-        // #################### MOVE BY ONE IS NOT ALLOWED IF THERE IS JUMP MOVE AVAILABLE #
-        if (isAvailableJumpMove(piece) && targetTileIsNextToPiece){
+        // #################### BLOCK MOVE BY ONE IF OTHER PIECE HAS JUMP MOVE AVAILABLE ##################
+        boolean isAvailableJumpMove = isAvailableJumpMove(piece);
+        if(isAvailableJumpMove == false && isAvailableJumpMoveOnAnyCurrentPlayerPiece()){
             return false;
         }
 
-        // #################### JUMPING OVER PIECE LOGIC ###################################
+        // #################### MOVE BY ONE IS NOT ALLOWED IF THERE IS JUMP MOVE AVAILABLE ################
+        if (isAvailableJumpMove && targetTileIsNextToPiece){
+            return false;
+        }
+
+        // #################### JUMPING OVER PIECE LOGIC ##################################################
         int middleRow = (pieceRow + finalRow) / 2;
         int middleCol = (pieceCol + finalCol) / 2;
 
@@ -103,7 +109,7 @@ public class Checkers {
                 isEnemyPiece(piece, middleRow, middleCol);
         boolean canJumpOverEnemyPiece = isJumpValid && middleTileHasEnemyPiece;
 
-        // #################### FINAL CHECK #################################################
+        // #################### FINAL CHECK ###############################################################
         if (targetTileIsNotOccupied && (targetTileIsNextToPiece || canJumpOverEnemyPiece)) {
             if (canJumpOverEnemyPiece) {
                 Board.tiles[middleRow][middleCol].removeAll();
@@ -161,6 +167,29 @@ public class Checkers {
 
         return false; // No jump available
     }
+
+    public static boolean isAvailableJumpMoveOnAnyCurrentPlayerPiece() {
+        for (int row = 0; row < Board.BOARD_SIZE; row++) {
+            for (int col = 0; col < Board.BOARD_SIZE; col++) {
+                if (Board.tiles[row][col].getComponentCount() == 1) {
+                    Component comp = Board.tiles[row][col].getComponent(0);
+                    if (comp instanceof Piece) {
+                        Piece piece = (Piece) comp;
+
+                        boolean isCurrentPlayersPiece =
+                                (playerTurn == PlayerTurn.RED && piece.color.equals(Color.RED)) ||
+                                        (playerTurn == PlayerTurn.BLUE && piece.color.equals(Color.BLUE));
+
+                        if (isCurrentPlayersPiece && isAvailableJumpMove(piece)) {
+                            return true;
+                        }
+                    }
+                }
+            }
+        }
+        return false;
+    }
+
 
     public static boolean isEnemyPiece(Piece attacker, int row, int col) {
         if (Board.tiles[row][col].getComponentCount() == 0) {
