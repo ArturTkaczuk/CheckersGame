@@ -1,9 +1,6 @@
 import javax.swing.*;
 import java.awt.*;
 
-import javax.swing.*;
-import java.awt.*;
-
 public class Checkers {
     public static Piece selectedPiece = null;
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
@@ -62,6 +59,8 @@ public class Checkers {
             gameMode = GameMode.PVP_LAN;
             switchToGame(rootContainer, gameModeContainer);
         });
+
+        pvpLanButton.setEnabled(false); // disable LAN Button
     }
 
     private void switchToGame(JPanel rootContainer, JPanel gameModeContainer) {
