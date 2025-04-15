@@ -82,7 +82,6 @@ public class Board extends JPanel {
         }
     }
 
-    // Place a piece on the board
     public void placePieceOnBoard(Piece piece, int row, int col) {
         tiles[row][col].add(piece);
         tiles[row][col].revalidate();

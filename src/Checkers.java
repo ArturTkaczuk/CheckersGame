@@ -1,37 +1,84 @@
 import javax.swing.*;
 import java.awt.*;
-import java.util.ArrayList;
-import java.util.List;
+
+import javax.swing.*;
+import java.awt.*;
 
 public class Checkers {
-    public static Piece selectedPiece = null; // Currently selected piece
+    public static Piece selectedPiece = null;
     public static int selectedPieceRow = -1, selectedPieceCol = -1;
-    public static PlayerTurn playerTurn = PlayerTurn.BLUE; // Default starting player is BLUE
+    public static PlayerTurn playerTurn = PlayerTurn.BLUE; // Player Blue starts first
     public static Piece pieceThatMadeJumpMoveForCurrentPlayer = null;
+    public static GameMode gameMode = null;
 
-    // Top panel
     public static GameInformationContainer gameInformationContainer;
 
     public Checkers() {
         Root root = new Root("Checkers");
 
-        // Main container panel with BorderLayout
-        JPanel container = new JPanel(new BorderLayout());
-        container.setPreferredSize(new Dimension(600, 700)); // Fixing the size
+        JPanel mainContainer = new JPanel(new BorderLayout());
+        mainContainer.setPreferredSize(new Dimension(600, 700));
+        root.add(mainContainer);
+        root.setVisible(true);
+
+        // Menu Panel
+        JPanel gameModePanel = new JPanel();
+        gameModePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        gameModePanel.setLayout(new GridLayout(3, 1, 10, 10));
+
+        JButton pvpButton = new JButton("PvP");
+        JButton pveButton = new JButton("PvE");
+        JButton pvpLanButton = new JButton("PvP LAN");
+
+        Font buttonFont = new Font("Arial", Font.BOLD, 40);
+        pvpButton.setFont(buttonFont);
+        pveButton.setFont(buttonFont);
+        pvpLanButton.setFont(buttonFont);
+
+        pvpButton.setFocusPainted(false);
+        pveButton.setFocusPainted(false);
+        pvpLanButton.setFocusPainted(false);
+
+        // Add buttons to gameModePanel
+        gameModePanel.add(pvpButton);
+        gameModePanel.add(pveButton);
+        gameModePanel.add(pvpLanButton);
+
+        mainContainer.add(gameModePanel, BorderLayout.CENTER);
+        root.pack();
+
+        // Event handlers
+        pvpButton.addActionListener(e -> {
+            gameMode = GameMode.PVP;
+            switchToGame(mainContainer, gameModePanel);
+        });
+
+        pveButton.addActionListener(e -> {
+            gameMode = GameMode.PVE;
+            switchToGame(mainContainer, gameModePanel);
+        });
+
+        pvpLanButton.addActionListener(e -> {
+            gameMode = GameMode.PVP_LAN;
+            switchToGame(mainContainer, gameModePanel);
+        });
+    }
+
+    private void switchToGame(JPanel mainContainer, JPanel gameModePanel) {
+        mainContainer.remove(gameModePanel); // Remove menu
 
         // Add GameInformationContainer at the top
         gameInformationContainer = new GameInformationContainer();
-        container.add(gameInformationContainer, BorderLayout.NORTH);
+        mainContainer.add(gameInformationContainer, BorderLayout.NORTH);
 
-        // Create the board and add it to the container (not directly to root)
+        // Add board with pieces
         Board board = new Board();
-        container.add(board, BorderLayout.CENTER);
-
-        root.add(container);
-
+        mainContainer.add(board, BorderLayout.CENTER);
         board.addPiecesToBoard();
 
-        root.setVisible(true);
+        // Refresh UI
+        mainContainer.revalidate();
+        mainContainer.repaint();
     }
 
     public static void switchPlayerTurn(){
@@ -217,6 +264,11 @@ public class Checkers {
     }
 
     public static void main(String[] args) {
+        // buttons custom styling
+        try {
+            UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+        } catch (Exception ignored) {}
+
         new Checkers();
     }
 }
