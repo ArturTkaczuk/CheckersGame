@@ -18,66 +18,7 @@ public class Checkers {
         root.add(rootContainer);
         root.setVisible(true);
 
-        // Menu Panel
-        JPanel gameModeContainer = new JPanel();
-        gameModeContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        gameModeContainer.setLayout(new GridLayout(3, 1, 10, 10));
-
-        JButton pvpButton = new JButton("PvP");
-        JButton pveButton = new JButton("PvE");
-        JButton pvpLanButton = new JButton("PvP LAN");
-
-        Font buttonFont = new Font("Arial", Font.BOLD, 40);
-        pvpButton.setFont(buttonFont);
-        pveButton.setFont(buttonFont);
-        pvpLanButton.setFont(buttonFont);
-
-        pvpButton.setFocusPainted(false);
-        pveButton.setFocusPainted(false);
-        pvpLanButton.setFocusPainted(false);
-
-        // Add buttons to gameModeContainer
-        gameModeContainer.add(pvpButton);
-        gameModeContainer.add(pveButton);
-        gameModeContainer.add(pvpLanButton);
-
-        rootContainer.add(gameModeContainer, BorderLayout.CENTER);
-        root.pack();
-
-        // Event handlers
-        pvpButton.addActionListener(e -> {
-            gameMode = GameMode.PVP;
-            switchToGame(rootContainer, gameModeContainer);
-        });
-
-        pveButton.addActionListener(e -> {
-            gameMode = GameMode.PVE;
-            switchToGame(rootContainer, gameModeContainer);
-        });
-
-        pvpLanButton.addActionListener(e -> {
-            gameMode = GameMode.PVP_LAN;
-            switchToGame(rootContainer, gameModeContainer);
-        });
-
-        pvpLanButton.setEnabled(false); // disable LAN Button
-    }
-
-    private void switchToGame(JPanel rootContainer, JPanel gameModeContainer) {
-        rootContainer.remove(gameModeContainer); // Remove menu
-
-        // Add GameInformationContainer at the top
-        gameInformationContainer = new GameInformationContainer();
-        rootContainer.add(gameInformationContainer, BorderLayout.NORTH);
-
-        // Add board with pieces
-        Board board = new Board();
-        rootContainer.add(board, BorderLayout.CENTER);
-        board.addPiecesToBoard();
-
-        // Refresh UI
-        rootContainer.revalidate();
-        rootContainer.repaint();
+        rootContainer.add(new GameModeContainer(rootContainer), BorderLayout.CENTER);
     }
 
     public static void switchPlayerTurn(){
