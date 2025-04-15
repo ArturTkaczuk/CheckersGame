@@ -2,11 +2,14 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Board extends JPanel {
     public static final int BOARD_SIZE = 8; // Chessboard size
     public static final JPanel[][] tiles = new JPanel[BOARD_SIZE][BOARD_SIZE]; // Board tiles
     public static final Piece[][] pieces = new Piece[BOARD_SIZE][BOARD_SIZE]; // movable pieces
+//    public static List<Piece> piecesWithLegalMoveForCurrentPlayer = new ArrayList<>();
 
     public Board(){
         this.setPreferredSize(new Dimension(600, 600));
@@ -26,36 +29,41 @@ public class Board extends JPanel {
                     tile.addMouseListener(new MouseAdapter() {
                         @Override
                         public void mouseClicked(MouseEvent e) {
-                            System.out.println("SelectedPiece:( " + Checkers.selectedPieceRow +","+ Checkers.selectedPieceCol +" )");
-                            boolean isAvailableJumpMoveForSelectedPiece = Checkers.isAvailableJumpMove(Checkers.selectedPiece);
-                            if (Checkers.isMoveLegal(Checkers.selectedPiece, targetRow, targetCol)) {
-                                if(isAvailableJumpMoveForSelectedPiece == false) {
-                                    // Selected piece moved by one tile
-                                    movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
-                                    if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
-                                    Checkers.switchPlayerTurn();
-                                } else {
-                                    // Selected piece made a jump move by 2 tiles
-                                    movePieceOnBoard(Checkers.selectedPiece, targetRow, targetCol);
-                                    if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
+                        // moving sequence:
+                        boolean isAvailableJumpMoveForSelectedPiece = Checkers.isAvailableJumpMove(Checkers.selectedPiece);
+                        if (Checkers.isMoveLegal(Checkers.selectedPiece, targetRow, targetCol)) {
+                            movePiece(isAvailableJumpMoveForSelectedPiece, targetRow, targetCol);
+                        }
 
-                                    if(Checkers.isAvailableJumpMove(Checkers.selectedPiece)){
-                                        // Another jump move for current player is available
-                                        Checkers.pieceThatMadeJumpMoveForCurrentPlayer = Checkers.selectedPiece;
-                                    } else {
-                                        // Another jump move for current player is NOT available
-                                        Checkers.pieceThatMadeJumpMoveForCurrentPlayer = null;
-                                        Checkers.switchPlayerTurn();
-                                    }
-                                }
-                            }
-                            Piece.repaintAllPieces();
-                            Checkers.selectedPiece = null;
-                            Checkers.selectedPieceRow = -1;
-                            Checkers.selectedPieceCol = -1;
+                        Piece.repaintAllPieces();
+                        Checkers.selectedPiece = null;
+                        Checkers.selectedPieceRow = -1;
+                        Checkers.selectedPieceCol = -1;
                         }
                     });
                 }
+            }
+        }
+    }
+
+    public void movePiece(boolean isAvailableJumpMoveForSelectedPiece, int targetRow, int targetCol){
+        if(isAvailableJumpMoveForSelectedPiece == false) {
+            // Selected piece moved by one tile
+            changePieceCoordinatesOnBoard(Checkers.selectedPiece, targetRow, targetCol);
+            if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
+            Checkers.switchPlayerTurn();
+        } else {
+            // Selected piece made a jump move by 2 tiles
+            changePieceCoordinatesOnBoard(Checkers.selectedPiece, targetRow, targetCol);
+            if(Checkers.checkIfSelectedPieceIsToBePromoted(targetRow)) Checkers.selectedPiece.promoteToKing();
+
+            if(Checkers.isAvailableJumpMove(Checkers.selectedPiece)){
+                // Another jump move for current player is available
+                Checkers.pieceThatMadeJumpMoveForCurrentPlayer = Checkers.selectedPiece;
+            } else {
+                // Another jump move for current player is NOT available
+                Checkers.pieceThatMadeJumpMoveForCurrentPlayer = null;
+                Checkers.switchPlayerTurn();
             }
         }
     }
@@ -88,7 +96,7 @@ public class Board extends JPanel {
         tiles[row][col].repaint();
     }
 
-    public static void movePieceOnBoard(Piece piece, int row, int col) {
+    public static void changePieceCoordinatesOnBoard(Piece piece, int row, int col) {
         // Remove the piece from the previous position
         for (int r = 0; r < BOARD_SIZE; r++) {
             for (int c = 0; c < BOARD_SIZE; c++) {
