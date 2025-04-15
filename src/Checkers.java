@@ -16,15 +16,15 @@ public class Checkers {
     public Checkers() {
         Root root = new Root("Checkers");
 
-        JPanel mainContainer = new JPanel(new BorderLayout());
-        mainContainer.setPreferredSize(new Dimension(600, 700));
-        root.add(mainContainer);
+        JPanel rootContainer = new JPanel(new BorderLayout());
+        rootContainer.setPreferredSize(new Dimension(600, 700));
+        root.add(rootContainer);
         root.setVisible(true);
 
         // Menu Panel
-        JPanel gameModePanel = new JPanel();
-        gameModePanel.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
-        gameModePanel.setLayout(new GridLayout(3, 1, 10, 10));
+        JPanel gameModeContainer = new JPanel();
+        gameModeContainer.setBorder(BorderFactory.createEmptyBorder(20, 20, 20, 20));
+        gameModeContainer.setLayout(new GridLayout(3, 1, 10, 10));
 
         JButton pvpButton = new JButton("PvP");
         JButton pveButton = new JButton("PvE");
@@ -39,46 +39,46 @@ public class Checkers {
         pveButton.setFocusPainted(false);
         pvpLanButton.setFocusPainted(false);
 
-        // Add buttons to gameModePanel
-        gameModePanel.add(pvpButton);
-        gameModePanel.add(pveButton);
-        gameModePanel.add(pvpLanButton);
+        // Add buttons to gameModeContainer
+        gameModeContainer.add(pvpButton);
+        gameModeContainer.add(pveButton);
+        gameModeContainer.add(pvpLanButton);
 
-        mainContainer.add(gameModePanel, BorderLayout.CENTER);
+        rootContainer.add(gameModeContainer, BorderLayout.CENTER);
         root.pack();
 
         // Event handlers
         pvpButton.addActionListener(e -> {
             gameMode = GameMode.PVP;
-            switchToGame(mainContainer, gameModePanel);
+            switchToGame(rootContainer, gameModeContainer);
         });
 
         pveButton.addActionListener(e -> {
             gameMode = GameMode.PVE;
-            switchToGame(mainContainer, gameModePanel);
+            switchToGame(rootContainer, gameModeContainer);
         });
 
         pvpLanButton.addActionListener(e -> {
             gameMode = GameMode.PVP_LAN;
-            switchToGame(mainContainer, gameModePanel);
+            switchToGame(rootContainer, gameModeContainer);
         });
     }
 
-    private void switchToGame(JPanel mainContainer, JPanel gameModePanel) {
-        mainContainer.remove(gameModePanel); // Remove menu
+    private void switchToGame(JPanel rootContainer, JPanel gameModeContainer) {
+        rootContainer.remove(gameModeContainer); // Remove menu
 
         // Add GameInformationContainer at the top
         gameInformationContainer = new GameInformationContainer();
-        mainContainer.add(gameInformationContainer, BorderLayout.NORTH);
+        rootContainer.add(gameInformationContainer, BorderLayout.NORTH);
 
         // Add board with pieces
         Board board = new Board();
-        mainContainer.add(board, BorderLayout.CENTER);
+        rootContainer.add(board, BorderLayout.CENTER);
         board.addPiecesToBoard();
 
         // Refresh UI
-        mainContainer.revalidate();
-        mainContainer.repaint();
+        rootContainer.revalidate();
+        rootContainer.repaint();
     }
 
     public static void switchPlayerTurn(){
